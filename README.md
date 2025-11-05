@@ -2,6 +2,22 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
 
+# Landing Page
+
+<img width="1688" height="646" alt="image" src="https://github.com/user-attachments/assets/8b6eb14b-98ab-46f8-964f-c5bc433e75a9" />
+
+# Results View
+
+<img width="1670" height="876" alt="image" src="https://github.com/user-attachments/assets/caa1558a-7d9a-48ca-aaec-3a14a45745d5" />
+
+# Modal View
+
+<img width="1674" height="879" alt="image" src="https://github.com/user-attachments/assets/365bbebb-9dc0-4c6f-9aae-f39c9c81ab26" />
+
+# Modal View Dropped Down
+
+<img width="1659" height="871" alt="image" src="https://github.com/user-attachments/assets/328515d0-8a48-421d-a82f-9d55b6a1696b" />
+
 ## Development server
 
 To start a local development server, run:
