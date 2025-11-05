@@ -45,30 +45,35 @@ function parseHouseNumber(address: string): string {
 function explainMatch(contribName: string, contribAddress: string, emp: any, nameScore: number, addrScore: number, cityMatch: boolean, zipMatch: boolean, matchType: string, thresholds: any): string[] {
   const notes = [];
   if (matchType === 'Direct') {
-    notes.push(`Name match between contributor ("${contribName}") and employee ("${emp.full_name}").`);
+    notes.push(`Name match`);
     if (nameScore < 1.0)
-      notes.push(`Name similarity less than 100% (${nameScore.toFixed(2)}): initials, middle names, or nicknames may differ.`);
+      notes.push(`Name similarity less than 100% (${nameScore.toFixed(2)}): initials, middle names, or nicknames may differ`);
   } else {
-    notes.push(`Name match between contributor and employee's spouse ("${emp.spouse_name}").`);
-    if (nameScore < 1.0) notes.push(`Spouse name similarity less than 100% (${nameScore.toFixed(2)}).`);
+    notes.push(`Name match between contributor and employee's spouse ("${emp.spouse_name}")`);
+    if (nameScore < 1.0) notes.push(`Spouse name similarity less than 100% (${nameScore.toFixed(2)})`);
   }
   if (addrScore > 0.9) {
-    notes.push(`Addresses are highly similar (${addrScore.toFixed(2)}).`);
+    if (addrScore === 1.0) {
+      notes.push(`Exact address match`);
+    }
+    else {
+      notes.push(`Addresses are highly similar (${addrScore.toFixed(2)})`);
+    }
     if (parseHouseNumber(emp.home_address) !== parseHouseNumber(contribAddress))
-      notes.push('Potential neighbor: street matches but house number is different.');
+      notes.push('Potential neighbor: street matches but house number is different');
   } else if (addrScore > 0.70) {
-    notes.push(`Address is a partial match (${addrScore.toFixed(2)}). Possible address formatting differences or neighbor.`);
+    notes.push(`Address partial match (${addrScore.toFixed(2)}). Possible address formatting differences or neighbor`);
   } else {
     notes.push(`Address match is weak (${addrScore.toFixed(2)}).`);
   }
-  if (cityMatch) notes.push('City matches.');
-  else notes.push('City does not match exactly.');
-  if (zipMatch) notes.push('ZIP codes match.');
-  else notes.push('ZIP codes do not match.');
-  if (nameScore < thresholds.name) notes.push('Lower confidence due to incomplete or fuzzy name match.');
-  if (addrScore < thresholds.address) notes.push('Lower confidence due to partial address match.');
-  if (!cityMatch || !zipMatch) notes.push('Lower confidence due to city or ZIP mismatch.');
-  if (matchType === 'Spouse') notes.push('Match is to spouse, not employee directly.');
+  if (cityMatch) notes.push('City match');
+  else notes.push('City does not match exactly');
+  if (zipMatch) notes.push('ZIP code match');
+  else notes.push('ZIP code does not match');
+  if (nameScore < thresholds.name) notes.push('Lower confidence due to incomplete or fuzzy name match');
+  if (addrScore < thresholds.address) notes.push('Lower confidence due to partial address match');
+  if (!cityMatch || !zipMatch) notes.push('Lower confidence due to city or ZIP mismatch');
+  if (matchType === 'Spouse') notes.push('Match is to spouse, not employee directly');
   return notes;
 }
 

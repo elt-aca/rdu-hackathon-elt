@@ -13,7 +13,7 @@ import { EmployeeMatches } from '../shared/types';
         <div class="summary-left">
           <div class="field"><strong>Title</strong><div class="value">{{ data.employee.title }}</div></div>
           <div class="field"><strong>Address</strong><div class="value">{{ data.employee.home_address }}, {{ data.employee.home_city }}, {{ data.employee.home_state }} {{ data.employee.home_zip }}</div></div>
-          <div class="field small"><strong>Spouse</strong> <span class="value">{{ data.employee.spouse_name || '—' }}</span></div>
+          <div class="field"><strong>Spouse</strong><div class="value">{{ data.employee.spouse_name || '—' }}</div></div>
         </div>
         <div class="summary-right">
           <div class="badges">
@@ -58,10 +58,16 @@ import { EmployeeMatches } from '../shared/types';
 
               <div class="match-details">
                 <div class="row"><strong>Contribution ID:</strong> {{ m.contribution_id || '—' }}</div>
-                <div class="row"><strong>Why this matched:</strong>
-                  <ul>
-                    <li *ngFor="let reason of m.match_explanation">{{ reason }}</li>
-                  </ul>
+                <div class="row reasons-row"><strong>Why this matched:</strong>
+                  <div class="reason-pills">
+                    <ng-container *ngFor="let reason of m.match_explanation">
+                      <div class="reason-pill" 
+                           [ngClass]="getReasonClass(reason)"
+                           [title]="getComparisonDetails(reason)">
+                        {{ reason }}
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
                 <div class="row"><strong>Compliance Flags:</strong> {{ (m.compliance_flags && m.compliance_flags.length) ? m.compliance_flags.join(', ') : '—' }}</div>
                 <div class="row"><strong>Insights:</strong>
@@ -122,6 +128,33 @@ import { EmployeeMatches } from '../shared/types';
     .match-details .row { margin:0.35rem 0; }
     .match-details ul { margin:0.25rem 0 0.25rem 1.1rem; }
 
+    .reasons-row { margin-top:0.75rem !important; }
+    .reason-pills { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.35rem; }
+    
+    .reason-pill { 
+      border-radius:4px; 
+      font-size:0.85rem;
+      padding:0.25rem 0.75rem;
+      transition:all 0.2s ease;
+      cursor:default;
+    }
+    
+    .reason-matched {
+      background:#e3f2fd;
+      color:#0d47a1;
+    }
+    
+    .reason-partial {
+      background:#fff3e0;
+      color:#e65100;
+      position:relative;
+    }
+    
+    .reason-partial:hover {
+      transform:translateY(-1px);
+      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+    }
+
     /* responsive tweaks */
     @media (max-width: 640px) {
       .employee-summary { flex-direction: column; align-items:stretch; }
@@ -140,6 +173,54 @@ export class EmployeeModalComponent {
   get highestConfidence(): number {
     if (!this.data || !this.data.matches || this.data.matches.length === 0) return 0;
     return Math.max(...this.data.matches.map(m => m.confidence_score || 0));
+  }
+
+  getReasonClass(reason: any): string {
+    if (typeof reason === 'string') {
+      const isPartial = reason.toLowerCase().includes('partial') || 
+                       reason.toLowerCase().includes('similar') ||
+                       reason.toLowerCase().includes('fuzzy');
+      return isPartial ? 'reason-partial' : 'reason-matched';
+    }
+    return 'reason-matched';
+  }
+
+  getSimplifiedReason(reason: string): string {
+    const text = reason.toLowerCase();
+    if (text.includes('name')) {
+      return text.includes('partial') ? 'Name partially matched' : 'Name matched';
+    }
+    if (text.includes('address')) {
+      return text.includes('partial') ? 'Address partially matched' : 'Address matched';
+    }
+    if (text.includes('zip')) {
+      return 'ZIP Code matched';
+    }
+    if (text.includes('city')) {
+      return 'City matched';
+    }
+    if (text.includes('state')) {
+      return 'State matched';
+    }
+    if (text.includes('spouse')) {
+      return text.includes('partial') ? 'Spouse name partially matched' : 'Spouse name matched';
+    }
+    // Generic fallback
+    return text.includes('partial') ? 'Partial match found' : 'Match found';
+  }
+
+  getComparisonDetails(reason: string): string {
+    if (!reason.toLowerCase().includes('partial')) {
+      return ''; // No tooltip for exact matches
+    }
+    
+    // Extract comparison values if they exist in the reason string
+    const matches = reason.match(/comparing "([^"]+)" with "([^"]+)"/i);
+    if (matches && matches.length === 3) {
+      return `Employee: "${matches[1]}" vs Contribution: "${matches[2]}"`;
+    }
+    
+    return reason; // Fallback to original reason if no comparison found
   }
 
 }
