@@ -45,7 +45,7 @@ import { EmployeeCardComponent } from "../employee-card/employee-card.component"
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1.25rem;
-      grid-auto-rows: 380px; /* fixed row height for consistent card sizing */
+      grid-auto-rows: 15rem; /* fixed row height for consistent card sizing */
       align-items: start;
       margin-top: 1rem;
     }
@@ -53,6 +53,7 @@ import { EmployeeCardComponent } from "../employee-card/employee-card.component"
     /* Each grid item is a flex container so the inner card can stretch.
        The child component (.employee-card) is expected to make its mat-card 100% height. */
     .grid-item {
+      height: 100%;
       display: flex;
       align-items: stretch;
     }

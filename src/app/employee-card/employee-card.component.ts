@@ -32,8 +32,9 @@ import { UpperCasePipe, DecimalPipe, NgClass, NgIf } from "@angular/common";
     mat-card.employee-card {
       height: 100%;
       width: 100%;
-      max-width: 420px;
-      min-width: 260px;
+      /* let the grid/container define width; avoid hard caps */
+      max-width: none;
+      min-width: 0;
       cursor: pointer;
       transition: transform 160ms ease, box-shadow 160ms ease;
       border-radius: 8px;
@@ -61,7 +62,15 @@ import { UpperCasePipe, DecimalPipe, NgClass, NgIf } from "@angular/common";
 
     .match-info { margin: 8px 0; color: rgba(0,0,0,0.85); font-size: 0.95rem; }
 
-    .risk-row { display:flex; align-items:center; gap:8px; margin-top:8px; width:100%; }
+    /* Make card content a column that expands so the risk row can be pushed to the bottom */
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      padding: 16px 16px 0; /* keep actions padding separate */
+    }
+
+    .risk-row { display:flex; align-items:center; gap:8px; margin-top:8px; width:100%; margin-top: auto; }
     .spacer { flex:1 1 auto; }
     .reason { color: rgba(0,0,0,0.6); font-size:0.88rem; }
 
