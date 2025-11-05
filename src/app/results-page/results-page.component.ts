@@ -27,6 +27,7 @@ import { EmployeeCardComponent } from "../employee-card/employee-card.component"
     .card-grid {
       display: flex;
       flex-wrap: wrap;
+      margin: 1.5em;
       gap: 1.5em;
       justify-content: flex-start;
     }
