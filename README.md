@@ -3,7 +3,7 @@
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
 
 # Landing Page
-
+#### Use the sample data files in the data folder.
 <img width="1688" height="646" alt="image" src="https://github.com/user-attachments/assets/8b6eb14b-98ab-46f8-964f-c5bc433e75a9" />
 
 # Results View
