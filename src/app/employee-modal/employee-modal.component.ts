@@ -67,7 +67,7 @@ import { EmployeeMatches } from '../shared/types';
     </mat-dialog-actions>
   `,
   styles: [`
-    h2 { margin-top: 0; }
+    h2 { margin: auto; }
     mat-dialog-content { max-height: 65vh; overflow: auto; }
     table { border-collapse: collapse; }
     th, td { border: 1px solid #999; padding: 0.15em 0.6em; font-size: 0.98em;}

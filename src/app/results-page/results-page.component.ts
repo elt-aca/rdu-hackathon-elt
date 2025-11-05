@@ -13,9 +13,6 @@ import { EmployeeCardComponent } from "../employee-card/employee-card.component"
     @if (employeeMatches.length === 0) {
         <div>No matched employees.</div>
     }
-    @else {
-      <div>{{employeeMatches.length}} matched employees.</div>
-    }
     <div class="card-grid">
       @for (result of employeeMatches; track $index) {
         <app-employee-card
@@ -48,14 +45,25 @@ export class ResultsPageComponent implements OnInit {
   ngOnInit() {
     const contribData = JSON.parse(sessionStorage.getItem('contribData') || '[]');
     const employeeData = JSON.parse(sessionStorage.getItem('employeeData') || '[]');
-    this.employeeMatches = matchEmployeeContributions(employeeData, contribData);
+    const matches = matchEmployeeContributions(employeeData, contribData);
+    this.employeeMatches = matches.sort((a, b) => {
+      const bMaxScore = Math.max(...b.matches.map(x => x.confidence_score));
+      const aMaxScore = Math.max(...a.matches.map(x => x.confidence_score));
 
-    console.log("Matched Employees:", employeeData, contribData, this.employeeMatches);
+      // First sort by highest confidence score
+      if (bMaxScore !== aMaxScore) {
+        return bMaxScore - aMaxScore;
+      }
+
+      // Then sort by number of matches
+      return b.matches.length - a.matches.length;
+    });
   }
 
   openModal(employee: EmployeeMatches) {
     this.dialog.open(EmployeeModalComponent, {
       width: '750px',
+      maxWidth: 'none',
       data: employee
     });
   }

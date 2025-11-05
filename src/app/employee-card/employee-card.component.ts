@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { EmployeeMatches } from '../shared/types';
 import { MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from "@angular/material/card";
-import { UpperCasePipe, DecimalPipe } from "@angular/common";
+import { UpperCasePipe, DecimalPipe, NgClass } from "@angular/common";
 
 @Component({
   selector: 'app-employee-card',
   standalone: true,
   template: `
-    <mat-card class="'risk-' + matches.risk_level" (click)="detail()">
+    <mat-card [ngClass]="'risk-' + matches.risk_level" (click)="detail()">
       <mat-card-header>
         <mat-card-title>{{matches.employee.full_name}}</mat-card-title>
         <mat-card-subtitle>{{matches.employee.title}}</mat-card-subtitle>
@@ -39,7 +39,7 @@ import { UpperCasePipe, DecimalPipe } from "@angular/common";
     .risk-label { font-size: 1.1em; }
     button { margin-top: 1em; }
   `],
-  imports: [MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, UpperCasePipe, DecimalPipe]
+  imports: [MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, UpperCasePipe, DecimalPipe, NgClass]
 })
 export class EmployeeCardComponent {
   @Input() matches!: EmployeeMatches;

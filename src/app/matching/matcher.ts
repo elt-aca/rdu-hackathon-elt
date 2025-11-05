@@ -42,10 +42,10 @@ function parseHouseNumber(address: string): string {
   return match ? match[1] : '';
 }
 
-function explainMatch(contribAddress: string, emp: any, nameScore: number, addrScore: number, cityMatch: boolean, zipMatch: boolean, matchType: string, thresholds: any): string[] {
+function explainMatch(contribName: string, contribAddress: string, emp: any, nameScore: number, addrScore: number, cityMatch: boolean, zipMatch: boolean, matchType: string, thresholds: any): string[] {
   const notes = [];
   if (matchType === 'Direct') {
-    notes.push(`Name match between contributor ("${contribAddress}") and employee ("${emp.full_name}").`);
+    notes.push(`Name match between contributor ("${contribName}") and employee ("${emp.full_name}").`);
     if (nameScore < 1.0)
       notes.push(`Name similarity less than 100% (${nameScore.toFixed(2)}): initials, middle names, or nicknames may differ.`);
   } else {
@@ -97,7 +97,7 @@ export function matchEmployeeContributions(
       const cityMatch = emp.home_city.toLowerCase() === cCity;
       const zipMatch = emp.home_zip === cZip;
       const confidence = 0.7 * nameScore + 0.2 * addrScore + 0.05 * (cityMatch ? 1 : 0) + 0.05 * (zipMatch ? 1 : 0);
-      const explanation = explainMatch(c.contributor_address, emp, nameScore, addrScore, cityMatch, zipMatch, "Direct", thresholds);
+      const explanation = explainMatch(c.contributor_name, c.contributor_address, emp, nameScore, addrScore, cityMatch, zipMatch, "Direct", thresholds);
       if (nameScore > nameThreshold && addrScore > 0.7) {
         const matched: MatchedContribution = {
           contribution_id: c.id,
@@ -137,7 +137,7 @@ export function matchEmployeeContributions(
       const cityMatch = emp.home_city.toLowerCase() === cCity;
       const zipMatch = emp.home_zip === cZip;
       const confidence = 0.7 * spouseScore + 0.2 * addrScore + 0.05 * (cityMatch ? 1 : 0) + 0.05 * (zipMatch ? 1 : 0);
-      const explanation = explainMatch(c.contributor_address, emp, spouseScore, addrScore, cityMatch, zipMatch, "Spouse", thresholds);
+      const explanation = explainMatch(c.contributor_name, c.contributor_address, emp, spouseScore, addrScore, cityMatch, zipMatch, "Spouse", thresholds);
       if (spouseScore > 0.85 && addrScore > 0.7) {
         const matched: MatchedContribution = {
           contribution_id: c.id,
