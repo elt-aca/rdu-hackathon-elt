@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { EmployeeMatches } from '../shared/types';
-import { MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from "@angular/material/card";
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from "@angular/material/card";
 import { UpperCasePipe, DecimalPipe, NgClass, NgIf } from "@angular/common";
 
 @Component({
@@ -22,17 +22,15 @@ import { UpperCasePipe, DecimalPipe, NgClass, NgIf } from "@angular/common";
         <div class="risk-row">
           <span class="risk-label">Risk: <b>{{ matches.risk_level | uppercase }}</b></span>
           <span class="spacer"></span>
-          <em class="reason" *ngIf="matches?.risk_reason">{{ matches.risk_reason }}</em>
+          <em class="reason" *ngIf="matches.risk_reason">{{ matches.risk_reason }}</em>
         </div>
       </mat-card-content>
-      <mat-card-actions>
-  <button mat-stroked-button color="primary" (click)="detail($event)" aria-label="View details for {{ matches.employee.full_name }}">Details</button>
-      </mat-card-actions>
     </mat-card>
   `,
   styles: [`
-    :host { display: block; }
+  :host { display: block; height: 100%; }
     mat-card.employee-card {
+      height: 100%;
       width: 100%;
       max-width: 420px;
       min-width: 260px;
@@ -82,7 +80,7 @@ import { UpperCasePipe, DecimalPipe, NgClass, NgIf } from "@angular/common";
       .avatar[mat-card-avatar] { width:48px; height:48px; font-size:0.95rem; }
     }
   `],
-  imports: [MatCardActions, MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, UpperCasePipe, DecimalPipe, NgClass, NgIf]
+  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, UpperCasePipe, DecimalPipe, NgClass, NgIf]
 })
 export class EmployeeCardComponent {
   @Input() matches!: EmployeeMatches;
